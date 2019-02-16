@@ -89,6 +89,7 @@ export default {
     padding: 10px;
     .add{
         padding-bottom: 10px;
+        text-align: right;
         .el-button{
             padding: 8px 10px;
             margin-left: 2px;

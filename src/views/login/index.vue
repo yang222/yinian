@@ -18,7 +18,7 @@
             <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:100%;height:60px;border-radius:30px" round >
+          <el-button type="primary" style="width:100%;height:60px;border-radius:30px" round  @click="enter">
             登 录
           </el-button>
         </el-form-item>
@@ -60,6 +60,9 @@ export default {
     },
     handleLogin() {
     
+    },
+    enter(){
+      this.$router.push("./home")
     }
   }
 }

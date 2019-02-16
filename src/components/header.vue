@@ -1,8 +1,8 @@
 <template>
     <div id="header">
         <el-row>
-            <el-col :span="4" class="left"><h1 class="logo">易念科技</h1></el-col>
-            <el-col :span="20"> <div class="names"></div></el-col>
+            <el-col :span="3" class="left"><h1 class="logo">易念科技</h1></el-col>
+            <el-col :span="21" class="right"> <div class="names"><a href="javascript:;" @click="loginOut">退出 <span></span></a></div></el-col>
         </el-row>
         
        
@@ -10,7 +10,11 @@
 </template>
 <script>
 export default {
-    
+    methods:{
+        loginOut(){
+            this.$router.push("./login")
+        }
+    }
 }
 </script>
 <style lang="scss">
@@ -28,6 +32,18 @@ export default {
         line-height: 60px;
         text-align: center;
         width: 100%;
+    }
+    .right{
+        text-align: right;
+        .names{
+            display: inline-block;
+            height: 60px;
+            line-height: 60px;
+            padding-right: 30px;
+            a{
+                display: block;
+            }
+        }
     }
 }
 </style>

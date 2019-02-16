@@ -1,6 +1,6 @@
 <template>
     <div id="home">
-        <!-- <headers></headers> -->
+        <headers></headers>
         <el-row class="tac">
             <el-col :span="3" class="leftList">
                 <el-menu

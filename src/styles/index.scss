@@ -1,0 +1,145 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+@import './sidebar.scss';
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial,
+    sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+* {
+  // @include scrollBar();
+  &::-webkit-scrollbar-track-piece {
+    // background: #d3dce6;
+    background: #d7d7d7;
+    z-index: 1;
+  }
+  &::-webkit-scrollbar {
+    width: 4px; height: 12px;
+    border-radius: 4px;
+    z-index: 1;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    // background: #99a9bf;
+    border-radius: 8px;
+    z-index: 1;
+  }
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: ' ';
+    clear: both;
+    height: 0;
+  }
+}
+
+//main-container全局样式
+.app-main {
+  min-height: 100%;
+}
+
+.app-container {
+  position: relative;
+  padding: 10px;
+  width: 100%;
+  min-height: 100%;
+}
+.app-card {
+  min-height: calc(100vh - 70px);
+}
+//查询表单form的样式
+.form-query-default {
+  @include clearfix;
+  width: $formMinWidth;
+  .el-form-item {
+    float: left;
+    margin-right: 20px;
+  }
+}
+//el-select下拉选自定义设置
+.custom-el-select {
+  width: $formItemWidth;
+}
+//el-input下拉选自定义设置
+.custom-el-input {
+  width: $formItemWidth!important;
+}
+.display-flex{
+  display: flex;
+}
+.align-items-center{
+  justify-content: center;
+  align-items: center;
+}
+
+// 日期区间选择器的样式优化
+.time-area .el-date-editor .el-range-separator {
+  width: 20px;
+}
+// 表格的固定列 在滚动时的白线问题
+.el-table__fixed-right::before, .el-table__fixed::before {
+  height: 0;
+}
+.time-area .el-form-item__content {
+  height: 40px;
+  box-sizing: border-box;
+}
+.el-card__body {
+  padding: 16px 20px 8px;
+}

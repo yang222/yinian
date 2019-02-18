@@ -51,6 +51,10 @@ export default {
         }
       };
     },
+    created(){
+        console.log(this.$route.query.id)
+        this.getData();
+    },
     mounted(){
         this.resource = new E('#websiteEditorElem')
         this.resource.onchange = function () {
@@ -59,6 +63,14 @@ export default {
         this.resource.create()
     },
     methods: {
+        getData(){
+            this.get({url:"New/select",data:{
+                id:this.$route.params.id,
+                signature:sessionStorage.token,
+            }},(data)=>{
+
+            })
+        },
       submitForm() {
           if(!this.ruleForm.name){
                 this.$message({
@@ -81,7 +93,8 @@ export default {
                 });
                 return
             }
-            this.post({url:"New/add",data:{
+            this.post({url:"New/update",data:{
+                id:this.$route.params.id,
                 title:this.ruleForm.name,
                 content:this.resource.txt.html(),
                 date:this.ruleForm.date1.toString(),

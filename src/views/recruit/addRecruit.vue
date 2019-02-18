@@ -13,13 +13,13 @@
                 </el-form-item>
                 </el-col>
             </el-form-item>
-            <el-form-item label="薪资范围" prop="name" :span="4">
+            <el-form-item label="薪资范围" :span="4">
                  <el-col :span="3">
-                    <el-input v-model="ruleForm.name" :span="3"></el-input>
+                    <el-input v-model="ruleForm.num1" :span="3"></el-input>
                  </el-col>
                  <el-col class="line" :span="1">-</el-col>
                  <el-col :span="3">
-                    <el-input v-model="ruleForm.name" :span="3"></el-input>
+                    <el-input v-model="ruleForm.num2" :span="3"></el-input>
                  </el-col>
             </el-form-item>
             <el-form-item label="职位描述" prop="desc">
@@ -42,34 +42,19 @@ export default {
       return {
         ruleForm: {
           name: '',
-          region: '',
           date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
+          num1:"",
+          num2:"",
           desc: '',
           descs: '',
         },
         rules: {
           name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-          ],
-          region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
+            { required: true, message: '请填写招聘职位', trigger: 'blur' },
+            // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
           ],
           date1: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ],
-          date2: [
-            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-          ],
-          type: [
-            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-          ],
-          resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
           ],
           desc: [
             { required: true, message: '请填写职位描述', trigger: 'blur' }
@@ -93,6 +78,8 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+        this.ruleForm.num1 = ""
+        this.ruleForm.num2 = ""
       },
       back(){
           this.$router.back(-1)
@@ -115,6 +102,7 @@ export default {
       text-align: left;
       textarea{
           height: 150px;
+          font-size: 14px;
           width: 50%;
           resize: none;
       }

@@ -12,9 +12,8 @@ export default new Router({
         {
           path: '/newsList', component: () => import('@/views/news/newsList')
         },
-        {
-          path: '/addNews', component: () => import('@/views/news/addNews')
-        },
+        { path: '/addNews', component: () => import('@/views/news/addNews')},
+        { path: '/editNews', component: () => import('@/views/news/editNews')},
         {
           path: '/recruitList', component: () => import('@/views/recruit/recruitList')
         },

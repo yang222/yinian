@@ -2,7 +2,7 @@
     <div id="home">
         <headers></headers>
         <el-row class="tac">
-            <el-col :span="3" class="leftList">
+            <el-col class="leftList">
                 <el-menu
                 default-active="2"
                 class="el-menu-vertical-demo"
@@ -50,7 +50,7 @@
                 </el-menu>
               
             </el-col>
-            <el-col :span="21">
+            <el-col class="rightCont">
                 <router-view></router-view>
             </el-col>
         </el-row>    
@@ -77,17 +77,24 @@ export default {
     padding:0;
     margin: 0;
     height: 100%;
+    .el-row{
+        display: flex;
+    }
     .tac{
         height: 100%;
     }
     .leftList{
         height: 100%;
         background: rgb(84, 92, 100);
+        width: 150px;
     }
     .link{
         display: block;
         width: 100%;
         height: 100%;
+    }
+    .rightCont{
+        flex: 1;
     }
 }
 </style>

@@ -3,22 +3,22 @@
     <div class="login-wrap">
       <el-form class="login-form" autoComplete="on" ref="loginForm" label-position="left" inline-message>
         <h3 class="title"><img src="/static/login/logo.png" class="logo"><span class="text">易念科技管理后台</span></h3>
-        <el-form-item prop="username">
-          <span class="svg-container svg-container_login">
-
-          </span>
-          <el-input name="username" type="text" autoComplete="on" placeholder="用户名" />
+        <el-form-item>
+          
+               <span class="iconfont icon-yonghu"></span>
+       
+          <el-input name="username" type="text" autoComplete="on" placeholder="用户名" v-model="loginForm.username" />
         </el-form-item>
-        <el-form-item prop="password">
-          <span class="svg-container svg-container_login">
- 
-          </span>
-          <el-input name="password"  autoComplete="on"
-            placeholder="密码"></el-input>
+        <el-form-item >
+         
+              <span class="iconfont icon-mima"></span>
+      
+            <el-input name="password"  autoComplete="on" v-model="loginForm.password"
+            placeholder="密码" type="password"></el-input>
             <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:100%;height:60px;border-radius:30px" round  @click="enter">
+          <el-button type="primary" style="width:100%;height:60px;border-radius:30px;font-size:18px;" round  @click="enter">
             登 录
           </el-button>
         </el-form-item>
@@ -45,7 +45,6 @@ export default {
         username: '',
         password: ''
       },
-      username:"",
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
@@ -62,7 +61,34 @@ export default {
     
     },
     enter(){
-      this.$router.push("./home")
+        if(!this.loginForm.username){
+          this.$message({
+            message: '请输入用户名！',
+            type: 'warning'
+          });
+          return
+        }
+        if(!this.loginForm.password){
+          this.$message({
+            message: '请输入用户密码！',
+            type: 'warning'
+          });
+          return
+        }
+        this.post({url:"index/login",data:{
+          username:this.loginForm.username,
+          password:this.loginForm.password,
+        }},(data)=>{
+            if(data.status == 200){
+              this.$store.state.token = data.data.signature;
+              sessionStorage.token = data.data.signature;
+              this.$router.push("./home")
+            }else{
+              this.$message.error(data.msg);
+            }
+            
+        })
+      
     }
   }
 }
@@ -74,10 +100,15 @@ $light_gray:#fff;
 /* reset element-ui css */
 .login-container {
   margin: 80px 0 100px 0;
+  .iconfont{
+    font-size: 24px;
+    color: #66b1ff;
+  }
   .el-input {
     display: inline-block;
     height: 46px;
     width: 85%;
+    vertical-align: top;
     input {
       background: transparent;
       border: 0px;
@@ -116,6 +147,16 @@ $dark_gray:#889aa4;
   background:url('/static/login/background.png') no-repeat;
   background-size: cover;
   position: relative;
+  .el-form-item__content{
+    height: 60px;
+    line-height:60px;
+    font-size:0;
+  }
+  .svg-container_login{
+    height: 22px;
+    font-size: 22px;
+    padding-top:2px;
+  }
   .login-wrap {
     position:absolute;
     top:10%;
@@ -145,12 +186,14 @@ $dark_gray:#889aa4;
           vertical-align: top;
           margin:0 16px 0 0;
           height: 46px;
-          width: 46px;
+          width: 96px;
         }
         .text{
           display: inline-block;
           vertical-align: top;
-          font-size: 42px;
+          font-size: 30px;
+          line-height:46px;
+          height: 46px;
           color: #333;
         }
       }
@@ -171,5 +214,9 @@ $dark_gray:#889aa4;
   .svg-container{
     font-size:0;
   }
+  .el-form-item{
+    border-color:#aaa;
+  }
 }
+
 </style>

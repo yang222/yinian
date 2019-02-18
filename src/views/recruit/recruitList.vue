@@ -34,12 +34,18 @@
             label="操作"
             width="200">
             <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)"  size="small" type="primary" >查看</el-button>
-                <el-button type="success" size="small">编辑</el-button>
-                <el-button type="info" size="small">删除</el-button>
+                <!-- <el-button @click="handleClick(scope.row)"  size="small" type="primary" >查看</el-button> -->
+                <el-button type="success" @click="toEdit(scope.$index)" size="small">编辑</el-button>
+                <el-button type="info" @click="deletes(scope.$index)" size="small">删除</el-button>
             </template>
             </el-table-column>
         </el-table>
+        <el-pagination
+            background
+            layout="prev, pager, next"
+            style="margin-top:20px;"
+            :total="totals">
+        </el-pagination>
     </div>
 </template>
 <script>
@@ -48,13 +54,29 @@ export default {
         add(){
             this.$router.push("./addRecruit")
         },
-        handleClick(row) {
-            console.log(row);
+        toEdit(index){
+            const id = this.tableData[index].id;
+            this.$router.push({path:"./editNews",query:{id:id}});
+        },
+        deletes(index){
+            this.$confirm('是否删除此条招聘信息?', '', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                    
+            });
         }
     },
 
     data() {
       return {
+        totals:20,
         tableData: [{
           date: '2016-05-03',
           name: '王小虎',

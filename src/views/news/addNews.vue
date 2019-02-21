@@ -16,9 +16,31 @@
                 </el-form-item>
                 </el-col>
             </el-form-item>
+            <el-form-item label="新闻类别">
+              <el-radio-group v-model="ruleForm.type">
+                <el-radio label="1">易念新闻</el-radio>
+                <el-radio label="2">行业新闻</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="添加图片">
+                <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
+                <div class="addimg">
+                  <el-upload
+                    class="upload-demo"
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :file-list="fileList2"
+                    :on-success="success"
+                    list-type="picture">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                  </el-upload>
+                </div>
+            </el-form-item>
             <el-form-item label="新闻内容">
                 <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
-                <div id="websiteEditorElem" style="height: 500px"></div>
+                <div id="websiteEditorElem" style="height: 400px"></div>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm()">立即创建</el-button>
@@ -37,7 +59,8 @@ export default {
           name: '',
           date1: '',
           resource: '',
-      
+          type:"1",
+ 
         },
         rules: {
           name: [
@@ -48,7 +71,10 @@ export default {
           date1: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
           ],
-        }
+        },
+        fileList2: [{name: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg', 
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
+         {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
       };
     },
     mounted(){
@@ -109,6 +135,15 @@ export default {
       },
       back(){
           this.$router.back(-1)
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      success(file){
+        console.log(file)
       }
     }
 }
@@ -124,7 +159,8 @@ export default {
         }
     }
     padding: 10px;
-    
+    .el-form-item__content{text-align: left;}   
+    .upload-demo{width: 800px;}
 }
 .el-popper{
     z-index: 10002 !important;

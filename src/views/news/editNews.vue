@@ -213,7 +213,7 @@ export default {
       },
       handleRemove(file, fileList) {
         this.fileList2.forEach((e,i)=>{
-            if(this.fileList2[i].url=file.url ){
+            if(this.fileList2[i].url==file.url ){
                 this.fileList2.splice(i,1);
             }
         })
@@ -228,7 +228,6 @@ export default {
           }
       },
       success(file){
-        console.log(file.status)
           if(file.status!=200){
               this.$message.error(file.msg);
           }else{

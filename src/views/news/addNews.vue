@@ -146,7 +146,7 @@ export default {
                     url:this.fileList2[i].url,
                 })
             })
-            this.post({url:"New/add",data:{
+            this.postJson({url:"New/add",data:JSON.stringify({
                 title:this.ruleForm.name,
                 content:this.resource.txt.html(),
                 date:new Date(this.ruleForm.date1).getTime(),
@@ -156,7 +156,7 @@ export default {
                 author:this.ruleForm.author,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid,
-            }},(data)=>{
+            })},(data)=>{
                 if(data.status == 200){
                     this.$message({
                       message: "添加新闻成功！",
@@ -180,7 +180,7 @@ export default {
       },
       handleRemove(file, fileList) {
         this.fileList2.forEach((e,i)=>{
-            if(this.fileList2[i].url=file.url ){
+            if(this.fileList2[i].url==file.url ){
                 this.fileList2.splice(i,1);
             }
         })

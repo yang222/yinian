@@ -71,51 +71,32 @@ function UrlSearch(data) {
 }
 Vue.prototype.postJson=function(obj,success,error){
     var data = JSON.parse(obj.data);
-    var tauth = getAuth;
-    data.from = UrlSearch("from");
-    data.tokenType = UrlSearch("tokenType");
-    data.sign = UrlSearch("sign");
-    if(data.size){
-        this.$http.post(http+obj.url+tauth+"&size="+data.size+"&index1="+data.index1+"&index2="+data.index2,JSON.stringify(data),{
-            headers:{'Content-Type' : 'application/json; charset=UTF-8',},
-            emulateJSON: true
-        })
-        .then((da)=>{   
-            if(da.body.statusCode == "10000200" || da.body.success){
-                success(da.body);
-                return; false
+    // var tauth = getAuth;
+    // data.from = UrlSearch("from");
+    // data.tokenType = UrlSearch("tokenType");
+    // data.sign = UrlSearch("sign");
+    this.$http.post(http+obj.url,JSON.stringify(data),{
+        headers:{'Content-Type' : 'application/json; charset=UTF-8',},
+        emulateJSON: true
+    })
+    .then((da)=>{   
+        if(da.body.statusCode == "10000200" || da.status == 200){
+            if(da.body.status == "302"){
+                alert(da.body.msg)
+                this.$router.push("/")
             }else{
-                error(da.body)
-            }
-            if(da.status == "200"){
                 success(da.body);
             }
-        })
-        .catch((err)=>{    
-            
-        //    this.$router.push("/login");
-        })
-    }else{
-        this.$http.post(http+obj.url+tauth,JSON.stringify(data),{
-            headers:{'Content-Type' : 'application/json; charset=UTF-8',},
-            emulateJSON: true
-        })
-        .then((da)=>{   
-            if(da.body.statusCode == "10000200" || da.body.success){
-                success(da.body);
-                return; false
-            }else{
-                error(da.body)
-            }
-            if(da.status == "200"){
-                success(da.body);
-            }
-        })
-        .catch((err)=>{    
-            
-        //    this.$router.push("/login");
-        })
-    }
+            // success(da.body);
+        }else{
+            error(da.body)
+        }
+    })
+    .catch((err)=>{    
+        
+    //    this.$router.push("/login");
+    })
+    
   
 }
 Vue.prototype.get=function(obj,success,error){

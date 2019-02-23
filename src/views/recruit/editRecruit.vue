@@ -29,7 +29,7 @@
                 <el-input type="textarea" v-model="ruleForm.descs" class="text"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">立即修改</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
                 <el-button type="primary" plain @click="back">返回</el-button>
             </el-form-item>
@@ -47,6 +47,7 @@ export default {
           num2:"",
           desc: '',
           descs: '',
+          id:"",
         },
         rules: {
           name: [
@@ -78,6 +79,7 @@ export default {
             }},(data)=>{
                 if(data.status == 200){
                     this.ruleForm.name = data.data.position
+                    this.ruleForm.id = data.data.id
                     this.ruleForm.date1 = new Date(data.data.date)
                     this.ruleForm.num1 = data.data.payStart
                     this.ruleForm.num2 = data.data.payEnd
@@ -93,6 +95,7 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.post({url:"Recruit/update",data:{
+                id:this.ruleForm.id,
                 position:this.ruleForm.name,
                 payStart:this.ruleForm.num1,
                 payEnd:this.ruleForm.num2,
@@ -107,7 +110,9 @@ export default {
                       message: "修改成功！",
                       type: 'success'
                     });
-                    this.$router.push("./recruitList")
+                    setTimeout(() => {
+                       this.$router.push("./recruitList") 
+                    }, 1000);
                     // this.resetForm('ruleForm');
                 }else{
                     this.$message.error(data.msg);

@@ -16,11 +16,11 @@
             <el-table-column
             prop="title"
             label="新闻标题"
-            width="120">
+            width="300">
             </el-table-column>
             <el-table-column
-            prop="content"
-            label="新闻内容"
+            prop="about"
+            label="新闻简介"
             >
             </el-table-column>
             <el-table-column
@@ -29,8 +29,8 @@
             width="200">
             <template slot-scope="scope">
                 <!-- <el-button size="small" type="primary" >查看</el-button> -->
-                <el-button type="success" @click="toEdit(scope.$index)" size="small" >编辑</el-button>
-                <el-button type="info"  @click="deletes(scope.$index)" size="small">删除</el-button>
+                <el-button type="success" @click="toEdit(scope.row.id)" size="small" >编辑</el-button>
+                <el-button type="info"  @click="deletes(scope.row.id)"  size="small">删除</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -38,6 +38,7 @@
             background
             layout="prev, pager, next"
             style="margin-top:20px;"
+            @current-change="change"
             :total="totals">
         </el-pagination>
     </div>
@@ -46,15 +47,14 @@
 export default {
     data() {
       return {
-        tableData: [{
-            id:"1",
-            date: '2016-05-03',
-            title: '王小虎',
-            content: '上海市普陀区金沙江路 1518 弄',
-      
-        }],
-        totals:10
+        tableData: [],
+        totals:10,
+        pageSize:"10",
+        page:1,
       }
+    },
+    created(){
+        this.getData();
     },
     methods:{
         add(){
@@ -62,30 +62,55 @@ export default {
         },
         getData(){
             this.get({url:"New/lists",data:{
+                page:this.page,
+                pageSize:this.pageSize,
                 signature:sessionStorage.token,
+                uid:sessionStorage.uid
             }},(data)=>{
-                // if()
-                this.tableData = data.data;
+                if(data.status == 200){
+                    this.tableData = data.data;
+                    this.totals = Number(data.totalNum)
+                }else{
+                    this.$message.error(data.msg);
+                }
+                
             })
         },
-        toEdit(index){
-            const id = this.tableData[index].id;
-            this.$router.push({path:"./editNews",query:{id:id}});
-        },
-        deletes(index){
+        // 删除新闻
+        deletes(id){
             this.$confirm('是否删除此条新闻?', '', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
+                this.post({url:"New/delete",data:{
+                    id:id,
+                    signature:sessionStorage.token,
+                    uid:sessionStorage.uid
+                }},(data)=>{
+                    if(data.status == 200){
+                        this.$message({
+                            message: "删除成功！",
+                            type: 'success'
+                            });
+                        this.getData();
+                    }else{
+                        this.$message.error(data.msg);
+                    }
+                    
+                })
             }).catch(() => {
                     
             });
-        }
+            
+        },
+        change(page){
+            this.page = page;
+            this.getData();
+        },
+        toEdit(id){
+            this.$router.push({path:"./editNews",query:{id:id}});
+        },
     }
 }
 </script>

@@ -9,6 +9,11 @@
                 <el-input v-model="ruleForm.name" :span="4"></el-input>
                  </el-col>
             </el-form-item>
+            <el-form-item label="新闻作者" prop="author">
+                <el-col :span="11">
+                <el-input v-model="ruleForm.author" :span="4"></el-input>
+                 </el-col>
+            </el-form-item>
             <el-form-item label="新闻时间" required>
                 <el-col :span="11">
                 <el-form-item prop="date1">
@@ -18,8 +23,8 @@
             </el-form-item>
             <el-form-item label="新闻类别">
               <el-radio-group v-model="ruleForm.type">
-                <el-radio label="1">易念新闻</el-radio>
-                <el-radio label="2">行业新闻</el-radio>
+                <el-radio label="1">行业新闻</el-radio>
+                <el-radio label="2">易念新闻</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="添加图片">
@@ -27,9 +32,12 @@
                 <div class="addimg">
                   <el-upload
                     class="upload-demo"
+                    ref="upload"
                     :action="url"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
+                    :on-change="addFile"
+                    :before-upload ="before"
                     :file-list="fileList2"
                     :on-success="success"
                     list-type="picture">
@@ -59,12 +67,14 @@ export default {
     data() {
       return {
         ruleForm: {
-          name: '',
-          date1: '',
-          resource: '',
-          type:"1",
+            name: '',
+            date1: '',
+            resource: '',
+            type:"1",
             desc:"",
+            author:"",
         },
+        files:[],
         url:"http://www.yinian.com:8080/Admin/New/upload?signature="+sessionStorage.token+"&uid="+sessionStorage.uid,
         rules: {
           name: [
@@ -77,11 +87,12 @@ export default {
           ],
           desc: [
             { required: true, message: '请填写新闻简介', trigger: 'blur' }
+          ],
+          author: [
+            { required: true, message: '请填写新闻作者', trigger: 'blur' }
           ]
         },
-        fileList2: [{name: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg', 
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
-         {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+        fileList2: []
       };
     },
     mounted(){
@@ -93,9 +104,16 @@ export default {
     },
     methods: {
       submitForm() {
-          if(!this.ruleForm.name){
+            if(!this.ruleForm.name){
                 this.$message({
                     message: '请输入新闻标题',
+                    type: 'warning'
+                });
+                return
+            }
+            if(!this.ruleForm.author){
+                this.$message({
+                    message: '请填写新闻作者',
                     type: 'warning'
                 });
                 return
@@ -107,6 +125,13 @@ export default {
                 });
                 return
             }
+            if(!this.ruleForm.date1){
+              this.$message({
+                    message: '请输入新闻简介！',
+                    type: 'warning'
+                });
+                return
+            }
             if(!this.resource.txt.html()){
               this.$message({
                     message: '请输入新闻内容',
@@ -114,10 +139,21 @@ export default {
                 });
                 return
             }
+            var files=[];
+            this.fileList2.forEach((e,i)=>{
+                files.push({
+                    filename:this.fileList2[i].filename,
+                    url:this.fileList2[i].url,
+                })
+            })
             this.post({url:"New/add",data:{
                 title:this.ruleForm.name,
                 content:this.resource.txt.html(),
-                date:this.ruleForm.date1.getTime(),
+                date:new Date(this.ruleForm.date1).getTime(),
+                about:this.ruleForm.desc ,
+                image_url:files,
+                type:this.ruleForm.type,
+                author:this.ruleForm.author,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid,
             }},(data)=>{
@@ -126,7 +162,9 @@ export default {
                       message: "添加新闻成功！",
                       type: 'success'
                     });
-                   
+                    setTimeout(()=>{
+                        this.$router.back(-1)
+                    },500)
                 }else{
                     this.$message.error(data.msg);
                 }
@@ -141,29 +179,33 @@ export default {
           this.$router.back(-1)
       },
       handleRemove(file, fileList) {
-        this.post({url:"New/remove ",data:{
-            name:file.name,
-            signature:sessionStorage.token,
-            uid:sessionStorage.uid,
-        }},(data)=>{
-            if(data.status == 200){
-                this.$message({
-                    message: "删除成功！",
-                    type: 'success'
-                });
-                
-            }else{
-                this.$message.error(data.msg);
+        this.fileList2.forEach((e,i)=>{
+            if(this.fileList2[i].url=file.url ){
+                this.fileList2.splice(i,1);
             }
-            
         })
-        console.log(file, fileList);
       },
       handlePreview(file) {
-        console.log(file);
       },
-      success(file){
-        console.log(file)
+      before(file,fileList){
+          if(file.size > 500*1024){
+              this.$message.error("图片大小超出500KB，请重新上传！");
+              return false;
+          }
+      },
+      addFile(file,fileList){
+          if(file.size > 500*1024){
+              this.$message.error("图片大小超出500KB，请重新上传！");
+              return false;
+          }
+      },
+      success(response, file, fileList){
+            
+            if(response.status!=200){
+                this.$message.error(response.msg);
+            }else{
+                this.fileList2.push({name:response.data.url,url:response.data.url,filename:response.data.filename})
+            }
       }
     }
 }

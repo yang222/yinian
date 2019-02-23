@@ -9,6 +9,11 @@
                 <el-input v-model="ruleForm.name" :span="4"></el-input>
                  </el-col>
             </el-form-item>
+            <el-form-item label="新闻作者" prop="author">
+                <el-col :span="11">
+                <el-input v-model="ruleForm.author" :span="4"></el-input>
+                 </el-col>
+            </el-form-item>
             <el-form-item label="新闻时间" required>
                 <el-col :span="11">
                 <el-form-item prop="date1">
@@ -16,12 +21,38 @@
                 </el-form-item>
                 </el-col>
             </el-form-item>
+            <el-form-item label="新闻类别">
+              <el-radio-group v-model="ruleForm.type">
+                <el-radio label="1">行业新闻</el-radio>
+                <el-radio label="2">易念新闻</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="添加图片">
+                <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
+                <div class="addimg">
+                  <el-upload
+                    class="upload-demo"
+                    :action="url"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :on-change="addFile"
+                    :file-list="fileList2"
+                    :on-success="success"
+                    list-type="picture">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                  </el-upload>
+                </div>
+            </el-form-item>
+            <el-form-item label="新闻简介" prop="desc">
+                <el-input type="textarea" v-model="ruleForm.desc" class="text"></el-input>
+            </el-form-item>
             <el-form-item label="新闻内容">
                 <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
-                <div id="websiteEditorElem" style="height: 500px"></div>
+                <div id="websiteEditorElem" style="height: 400px"></div>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm()">立即创建</el-button>
+                <el-button type="primary" @click="submitForm()">立即修改</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
                 <el-button type="primary" plain  @click="back">返回</el-button>
             </el-form-item>
@@ -34,11 +65,15 @@ export default {
     data() {
       return {
         ruleForm: {
-          name: '',
-          date1: '',
-          resource: '',
-      
+            name: '',
+            date1: '',
+            resource: '',
+            type:"1",
+            desc:"",
+            author:"",
+            id:"",
         },
+        url:"http://www.yinian.com:8080/Admin/New/upload?signature="+sessionStorage.token+"&uid="+sessionStorage.uid,
         rules: {
           name: [
             { required: true, message: '请输入新闻标题', trigger: 'blur' },
@@ -48,33 +83,69 @@ export default {
           date1: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
           ],
-        }
+          desc: [
+            { required: true, message: '请填写新闻简介', trigger: 'blur' }
+          ],
+          author: [
+            { required: true, message: '请填写新闻作者', trigger: 'blur' }
+          ]
+        },
+        fileList2: []
       };
     },
-    created(){
-        console.log(this.$route.query.id)
-        this.getData();
-    },
+    // created(){
+        
+    // },
     mounted(){
         this.resource = new E('#websiteEditorElem')
         this.resource.onchange = function () {
           
         }
-        this.resource.create()
+        this.resource.create();
+        this.getData();
     },
     methods: {
+        //获取详细信息
         getData(){
             this.get({url:"New/select",data:{
-                id:this.$route.params.id,
+                id:this.$route.query.id,
                 signature:sessionStorage.token,
+                uid:sessionStorage.uid
             }},(data)=>{
-
+                if(data.status == 200){
+                    this.ruleForm.name = data.data.title
+                    this.ruleForm.id = data.data.id;
+                    this.ruleForm.author = data.data.author;
+                    this.ruleForm.date1 = new Date(data.data.date)
+                    this.ruleForm.type = data.data.type;
+                    this.ruleForm.desc = data.data.about;
+                    this.resource.txt.html(data.data.content)
+                    if(!data.data.image_url || data.data.image_url.length > 0){
+                        data.data.image_url.forEach((e,i)=>{
+                            this.fileList2.push({
+                                name:data.data.image_url[i].url,
+                                url:data.data.image_url[i].url,
+                                filename:data.data.image_url[i].filename,
+                            })
+                        })
+                    }
+                }else{
+                    this.$message.error(data.msg);
+                }
+                
             })
         },
       submitForm() {
-          if(!this.ruleForm.name){
+            if(!this.ruleForm.name){
                 this.$message({
                     message: '请输入新闻标题',
+                    type: 'warning'
+                });
+                return
+            }
+            if(!this.ruleForm.author){
+                this.$message({
+                    message: '请填写新闻作者',
                     type: 'warning'
                 });
                 return
@@ -86,6 +157,13 @@ export default {
                 });
                 return
             }
+            if(!this.ruleForm.date1){
+              this.$message({
+                    message: '请输入新闻简介！',
+                    type: 'warning'
+                });
+                return
+            }
             if(!this.resource.txt.html()){
               this.$message({
                     message: '请输入新闻内容',
@@ -93,23 +171,33 @@ export default {
                 });
                 return
             }
+            var files=[];
+            this.fileList2.forEach((e,i)=>{
+                files.push({
+                    filename:this.fileList2[i].filename,
+                    url:this.fileList2[i].url,
+                })
+            })
             this.post({url:"New/update",data:{
-                id:this.$route.params.id,
+                id:this.ruleForm.id,
                 title:this.ruleForm.name,
                 content:this.resource.txt.html(),
-                date:this.ruleForm.date1.toString(),
-                signature:sessionStorage.token
+                date:new Date(this.ruleForm.date1).getTime(),
+                about:this.ruleForm.desc ,
+                image_url:files,
+                type:this.ruleForm.type,
+                author:this.ruleForm.author,
+                signature:sessionStorage.token,
+                uid:sessionStorage.uid,
             }},(data)=>{
                 if(data.status == 200){
-                    this.$alert('密码修改成功，请重新登录', '', {
-                        confirmButtonText: '确定',
-                        callback: action => {
-                            this.$store.state.token = "";
-                            sessionStorage.token = "";
-                            this.$router.push("./login")
-                        }
+                    this.$message({
+                      message: "修改新闻成功！",
+                      type: 'success'
                     });
-                   
+                    setTimeout(()=>{
+                        this.$router.back(-1)
+                    },500)
                 }else{
                     this.$message.error(data.msg);
                 }
@@ -122,12 +210,40 @@ export default {
       },
       back(){
           this.$router.back(-1)
+      },
+      handleRemove(file, fileList) {
+        this.fileList2.forEach((e,i)=>{
+            if(this.fileList2[i].url=file.url ){
+                this.fileList2.splice(i,1);
+            }
+        })
+      },
+      handlePreview(file) {
+      
+      },
+      addFile(file,fileList){
+          if(file.size > 500*1024){
+              this.$message.error("图片大小超出500KB，请重新上传！");
+              return false;
+          }
+      },
+      success(file){
+        console.log(file.status)
+          if(file.status!=200){
+              this.$message.error(file.msg);
+          }else{
+              this.fileList2.push({name:file.data.url,url:file.data.url,filename:file.data.filename})
+          }
+         
+        
       }
     }
 }
 </script>
 <style lang="scss">
 .addNews{
+    height: 100%;
+    overflow-y: scroll;
      .add{
         padding-bottom: 10px;
         text-align: right;
@@ -138,7 +254,8 @@ export default {
     }
     padding: 10px;
     padding-bottom: 50px;
-    
+    .el-form-item__content{text-align: left;}   
+    .upload-demo{width: 800px;}
 }
 .el-popper{
     z-index: 10002 !important;

@@ -72,6 +72,9 @@ export default {
                 uid:sessionStorage.uid
             }},(data)=>{
                 if(data.status == 200){
+                    data.data.forEach((e,i) => {
+                        data.data[i]["pay"] = data.data[i].payStart+"-"+data.data[i].payEnd;
+                    });
                     this.tableData = data.data;
                     this.totals = Number(data.totalNum);
                     // this.$message({
@@ -143,5 +146,6 @@ export default {
         padding: 4px 10px;
         margin-left: 2px;
     }
+    .cell{overflow: hidden; text-overflow: ellipsis;white-space: nowrap;overflow: hidden;}
 }
 </style>

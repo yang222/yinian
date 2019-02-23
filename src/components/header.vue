@@ -27,7 +27,7 @@ export default {
     position: fixed;
     top:0;
     left: 0;
-    z-index: 1000003;
+    z-index: 1;
     background: #fff;
     width: 100%;
     .el-row{

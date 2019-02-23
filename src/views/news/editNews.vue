@@ -49,7 +49,7 @@
             </el-form-item>
             <el-form-item label="新闻内容">
                 <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
-                <div id="websiteEditorElem" style="height: 400px"></div>
+                <div id="websiteEditorElem"></div>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm()">立即修改</el-button>
@@ -255,6 +255,9 @@ export default {
     padding-bottom: 50px;
     .el-form-item__content{text-align: left;}   
     .upload-demo{width: 800px;}
+    .w-e-text-container{
+        height: 500px !important;/*!important是重点，因为原div是行内样式设置的高度300px*/
+    }
 }
 .el-popper{
     z-index: 10002 !important;

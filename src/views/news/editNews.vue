@@ -178,7 +178,7 @@ export default {
                     url:this.fileList2[i].url,
                 })
             })
-            this.post({url:"New/update",data:{
+            this.postJson({url:"New/update",data:JSON.stringify({
                 id:this.ruleForm.id,
                 title:this.ruleForm.name,
                 content:this.resource.txt.html(),
@@ -189,7 +189,7 @@ export default {
                 author:this.ruleForm.author,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid,
-            }},(data)=>{
+            })},(data)=>{
                 if(data.status == 200){
                     this.$message({
                       message: "修改新闻成功！",

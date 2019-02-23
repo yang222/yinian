@@ -82,7 +82,7 @@ export default {
                     this.ruleForm.num1 = data.data.payStart
                     this.ruleForm.num2 = data.data.payEnd
                     this.ruleForm.desc = data.data.content
-                    this.ruleForm.descs = data.data.required
+                    this.ruleForm.descs = data.data.require
                 }else{
                     this.$message.error(data.msg);
                 }
@@ -98,7 +98,7 @@ export default {
                 payEnd:this.ruleForm.num2,
                 date:new Date(this.ruleForm.date1).getTime(),
                 content:this.ruleForm.desc,
-                required:this.ruleForm.descs,
+                require:this.ruleForm.descs,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid
             }},(data)=>{

@@ -55,7 +55,7 @@ export default {
       return {
         page:"1",
         pageSize:10,
-        totals:20,
+        totals:1,
         tableData: []
       }
     },
@@ -73,6 +73,7 @@ export default {
             }},(data)=>{
                 if(data.status == 200){
                     this.tableData = data.data;
+                    this.totals = Number(data.totalNum);
                     // this.$message({
                     //   message: "添加成功！",
                     //   type: 'success'

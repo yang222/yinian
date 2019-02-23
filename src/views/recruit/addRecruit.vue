@@ -73,9 +73,9 @@ export default {
                 position:this.ruleForm.name,
                 payStart:this.ruleForm.num1,
                 payEnd:this.ruleForm.num2,
-                date:this.ruleForm.date1.getTime(),
+                date:new Date(this.ruleForm.date1).getTime(),
                 content:this.ruleForm.desc,
-                required:this.ruleForm.descs,
+                require:this.ruleForm.descs,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid
             }},(data)=>{

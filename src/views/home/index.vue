@@ -85,6 +85,8 @@ export default {
     }
     .leftList{
         height: 100%;
+        box-sizing: border-box;
+        padding-top: 100px;
         background: rgb(84, 92, 100);
         width: 200px;
     }
@@ -95,6 +97,8 @@ export default {
     }
     .rightCont{
         flex: 1;
+        box-sizing: border-box;
+        padding-top: 100px;
     }
 }
 </style>

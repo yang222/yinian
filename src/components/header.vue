@@ -24,6 +24,12 @@ export default {
     height: 88px;
     border-bottom: 1px solid rgb(84, 92, 100);
     overflow: hidden;
+    position: fixed;
+    top:0;
+    left: 0;
+    z-index: 1000003;
+    background: #fff;
+    width: 100%;
     .el-row{
         display: flex;
     }

@@ -27,7 +27,7 @@
                 <div class="addimg">
                   <el-upload
                     class="upload-demo"
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    :action="url"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :file-list="fileList2"
@@ -37,6 +37,9 @@
                     <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                   </el-upload>
                 </div>
+            </el-form-item>
+            <el-form-item label="新闻简介" prop="desc">
+                <el-input type="textarea" v-model="ruleForm.desc" class="text"></el-input>
             </el-form-item>
             <el-form-item label="新闻内容">
                 <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
@@ -60,8 +63,9 @@ export default {
           date1: '',
           resource: '',
           type:"1",
- 
+            desc:"",
         },
+        url:"http://www.yinian.com:8080/Admin/New/upload?signature="+sessionStorage.token+"&uid="+sessionStorage.uid,
         rules: {
           name: [
             { required: true, message: '请输入新闻标题', trigger: 'blur' },
@@ -71,6 +75,9 @@ export default {
           date1: [
             { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
           ],
+          desc: [
+            { required: true, message: '请填写新闻简介', trigger: 'blur' }
+          ]
         },
         fileList2: [{name: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg', 
         url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
@@ -110,17 +117,14 @@ export default {
             this.post({url:"New/add",data:{
                 title:this.ruleForm.name,
                 content:this.resource.txt.html(),
-                date:this.ruleForm.date1.toString(),
-                signature:sessionStorage.token
+                date:this.ruleForm.date1.getTime(),
+                signature:sessionStorage.token,
+                uid:sessionStorage.uid,
             }},(data)=>{
                 if(data.status == 200){
-                    this.$alert('密码修改成功，请重新登录', '', {
-                        confirmButtonText: '确定',
-                        callback: action => {
-                            this.$store.state.token = "";
-                            sessionStorage.token = "";
-                            this.$router.push("./login")
-                        }
+                    this.$message({
+                      message: "添加新闻成功！",
+                      type: 'success'
                     });
                    
                 }else{
@@ -137,6 +141,22 @@ export default {
           this.$router.back(-1)
       },
       handleRemove(file, fileList) {
+        this.post({url:"New/remove ",data:{
+            name:file.name,
+            signature:sessionStorage.token,
+            uid:sessionStorage.uid,
+        }},(data)=>{
+            if(data.status == 200){
+                this.$message({
+                    message: "删除成功！",
+                    type: 'success'
+                });
+                
+            }else{
+                this.$message.error(data.msg);
+            }
+            
+        })
         console.log(file, fileList);
       },
       handlePreview(file) {
@@ -150,6 +170,8 @@ export default {
 </script>
 <style lang="scss">
 .addNews{
+    height: 100%;
+    overflow-y: scroll;
      .add{
         padding-bottom: 10px;
         text-align: right;
@@ -159,6 +181,7 @@ export default {
         }
     }
     padding: 10px;
+    padding-bottom: 50px;
     .el-form-item__content{text-align: left;}   
     .upload-demo{width: 800px;}
 }

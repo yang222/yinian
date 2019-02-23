@@ -65,15 +65,38 @@ export default {
         }
       };
     },
+    created(){
+        this.getData();
+    },
     methods: {
+        //获取详细信息
+        getData(){
+            this.get({url:"Recruit/select",data:{
+                id:this.$route.query.id,
+                signature:sessionStorage.token,
+                uid:sessionStorage.uid
+            }},(data)=>{
+                if(data.status == 200){
+                    this.ruleForm.name = data.data.position
+                    this.ruleForm.date1 = new Date(data.data.date)
+                    this.ruleForm.num1 = data.data.payStart
+                    this.ruleForm.num2 = data.data.payEnd
+                    this.ruleForm.desc = data.data.content
+                    this.ruleForm.descs = data.data.required
+                }else{
+                    this.$message.error(data.msg);
+                }
+                
+            })
+        },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.post({url:"Recruit/add",data:{
+            this.post({url:"Recruit/update",data:{
                 position:this.ruleForm.name,
                 payStart:this.ruleForm.num1,
                 payEnd:this.ruleForm.num2,
-                date:this.ruleForm.date1.getTime(),
+                date:new Date(this.ruleForm.date1).getTime(),
                 content:this.ruleForm.desc,
                 required:this.ruleForm.descs,
                 signature:sessionStorage.token,
@@ -81,10 +104,11 @@ export default {
             }},(data)=>{
                 if(data.status == 200){
                     this.$message({
-                      message: "添加成功！",
+                      message: "修改成功！",
                       type: 'success'
                     });
-                    this.resetForm('ruleForm');
+                    this.$router.push("./recruitList")
+                    // this.resetForm('ruleForm');
                 }else{
                     this.$message.error(data.msg);
                 }

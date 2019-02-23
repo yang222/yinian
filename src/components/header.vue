@@ -21,26 +21,26 @@ export default {
 </script>
 <style lang="scss">
 #header{
-    height: 60px;
+    height: 88px;
     border-bottom: 1px solid rgb(84, 92, 100);
     overflow: hidden;
     .el-row{
         display: flex;
     }
     .left{
-        min-width: 100px;
-        width: 150px;
+        min-width: 150px;
+        width: 200px;
     }
     .logo{
         float: left;
-        height: 60px;
+        height: 88px;
         font-size: 34px;
         line-height: 60px;
         text-align: center;
         width: 100%;
-        text-indent: 1000000000000px;
+        text-indent: -1000000000000px;
         background:url("./../../static/login/logo.png") no-repeat center center;
-        background-size: 100px 46px;
+        background-size: auto 80%;
     }
     .right{
         flex: 1;
@@ -54,8 +54,8 @@ export default {
         }
         .names{
             display: inline-block;
-            height: 59px;
-            line-height: 59px;
+            height: 99px;
+            line-height: 99px;
             padding-right: 30px;
             a{
                 display: block;

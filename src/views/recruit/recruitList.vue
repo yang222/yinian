@@ -11,22 +11,22 @@
             fixed
             prop="date"
             label="日期"
-            width="150">
+            width="180">
             </el-table-column>
             <el-table-column
-            prop="name"
+            prop="position"
             label="职位"
             width="120">
             </el-table-column>
              <el-table-column
-            prop="province"
+            prop="pay"
             label="薪资"
             width="150"
             >
             </el-table-column>
             <el-table-column
-            prop="province"
-            label="招聘内容"
+            prop="content"
+            label="职位职责"
             >
             </el-table-column>
             <el-table-column
@@ -35,8 +35,8 @@
             width="200">
             <template slot-scope="scope">
                 <!-- <el-button @click="handleClick(scope.row)"  size="small" type="primary" >查看</el-button> -->
-                <el-button type="success" @click="toEdit(scope.$index)" size="small">编辑</el-button>
-                <el-button type="info" @click="deletes(scope.$index)" size="small">删除</el-button>
+                <el-button type="success" @click="toEdit(scope.row.id)" size="small">编辑</el-button>
+                <el-button type="info" @click="deletes(scope.row.id)" size="small">删除</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -44,19 +44,74 @@
             background
             layout="prev, pager, next"
             style="margin-top:20px;"
+            @current-change="change"
             :total="totals">
         </el-pagination>
     </div>
 </template>
 <script>
 export default {
+     data() {
+      return {
+        page:"1",
+        pageSize:10,
+        totals:20,
+        tableData: []
+      }
+    },
+    created(){
+        this.getData();
+    },
     methods: {
+        //获取招聘
+        getData(){
+            this.get({url:"Recruit/lists",data:{
+                page:this.page,
+                pageSize:this.pageSize,
+                signature:sessionStorage.token,
+                uid:sessionStorage.uid
+            }},(data)=>{
+                if(data.status == 200){
+                    this.tableData = data.data;
+                    // this.$message({
+                    //   message: "添加成功！",
+                    //   type: 'success'
+                    // });
+                    // this.resetForm('ruleForm');
+                }else{
+                    this.$message.error(data.msg);
+                }
+                
+            })
+        },
+        //删除招聘信息
+        delete(id){
+            this.post({url:"Recruit/delete",data:{
+                id:id,
+                signature:sessionStorage.token,
+                uid:sessionStorage.uid
+            }},(data)=>{
+                if(data.status == 200){
+                    this.$message({
+                      message: "删除成功！",
+                      type: 'success'
+                    });
+                    this.getData();
+                }else{
+                    this.$message.error(data.msg);
+                }
+                
+            })
+        },
+        change(page){
+            this.page = page;
+            this.getData();
+        },
         add(){
             this.$router.push("./addRecruit")
         },
-        toEdit(index){
-            const id = this.tableData[index].id;
-            this.$router.push({path:"./editNews",query:{id:id}});
+        toEdit(id){
+            this.$router.push({path:"./editRecruit",query:{id:id}});
         },
         deletes(index){
             this.$confirm('是否删除此条招聘信息?', '', {
@@ -64,50 +119,12 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
+                this.delete(index)
             }).catch(() => {
-                    
+                
             });
         }
     },
-
-    data() {
-      return {
-        totals:20,
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }]
-      }
-    }
 }
 </script>
 <style lang="scss">

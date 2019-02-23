@@ -21,6 +21,9 @@ export default new Router({
           path: '/addRecruit', component: () => import('@/views/recruit/addRecruit')
         },
         {
+          path: '/editRecruit', component: () => import('@/views/recruit/editRecruit')
+        },
+        {
           path: '/password', component: () => import('@/views/pw/password')
         }
       ]

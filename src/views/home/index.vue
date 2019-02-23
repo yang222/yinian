@@ -86,7 +86,7 @@ export default {
     .leftList{
         height: 100%;
         background: rgb(84, 92, 100);
-        width: 150px;
+        width: 200px;
     }
     .link{
         display: block;

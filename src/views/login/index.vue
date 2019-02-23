@@ -14,7 +14,7 @@
               <span class="iconfont icon-mima"></span>
       
             <el-input name="password"  autoComplete="on" v-model="loginForm.password"
-            placeholder="密码" type="password"></el-input>
+            placeholder="密码" type="password" @keyup.enter.native="enter"></el-input>
             <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
         </el-form-item>
         <el-form-item>
@@ -53,6 +53,7 @@ export default {
       pwdType: 'password'
     }
   },
+
   methods: {
     showPwd() {
      
@@ -81,6 +82,8 @@ export default {
         }},(data)=>{
             if(data.status == 200){
               this.$store.state.token = data.data.signature;
+              this.$store.state.uid = data.data.uid;
+              sessionStorage.uid = data.data.uid;
               sessionStorage.token = data.data.signature;
               this.$router.push("./home")
             }else{

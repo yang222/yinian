@@ -19,20 +19,34 @@ Vue.config.productionTip = false
 const store=new Vuex.Store({
     state:{
         token:"",
+        uid:"",
     }   
 })
 
 var http = "http://www.yinian.com:8080/Admin/";
 Vue.prototype.post=function(obj,success,error){
+
   this.$http.post(http+obj.url,obj.data,{
         headers:{'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'},
         emulateJSON: true
   })
   .then((da)=>{
       if(da.status == "200"){
-          success(da.body);
+            if(da.body.status == "302"){
+                alert(da.body.msg)
+                this.$router.push("/")
+            }else{
+                success(da.body);
+            }
+          
       }else{
-        error(da.body)
+        if(da.body.status == "302"){
+            alert(da.body.msg)
+            this.$router.push("/")
+        }else{
+            error(da.body)
+        }
+        
       }
   })
   .catch((err)=>{    
@@ -112,7 +126,13 @@ Vue.prototype.get=function(obj,success,error){
     .then((da)=>{
         
         if(da.body.statusCode == "10000200" || da.status == 200){
-            success(da.body);
+            if(da.body.status == "302"){
+                alert(da.body.msg)
+                this.$router.push("/")
+            }else{
+                success(da.body);
+            }
+            // success(da.body);
         }else{
             error(da.body)
         }

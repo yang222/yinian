@@ -83,7 +83,8 @@ export default {
                 oldPassword:this.formLabelAlign.password,
                 newPassword:this.formLabelAlign.password1,
                 conPassword:this.formLabelAlign.password2,
-                signature:sessionStorage.token
+                signature:sessionStorage.token,
+                uid:sessionStorage.uid,
             }},(data)=>{
                 if(data.status == 200){
                     this.$alert('密码修改成功，请重新登录', '', {

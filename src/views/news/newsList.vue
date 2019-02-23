@@ -129,5 +129,6 @@ export default {
         padding: 4px 10px;
         margin-left: 2px;
     }
+    .cell{overflow: hidden; text-overflow: ellipsis;white-space: nowrap;overflow: hidden;}
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-wrap">
       <el-form class="login-form" autoComplete="on" ref="loginForm" label-position="left" inline-message>
-        <h3 class="title"><img src="/static/login/logo.png" class="logo"><span class="text">易念科技管理后台</span></h3>
+        <h3 class="title"><img src="../../../static/login/logo.png" class="logo"><span class="text">易念科技管理后台</span></h3>
         <el-form-item>
           
                <span class="iconfont icon-yonghu"></span>

@@ -16,7 +16,7 @@
             <el-table-column
             prop="position"
             label="职位"
-            width="120">
+            width="200">
             </el-table-column>
              <el-table-column
             prop="pay"

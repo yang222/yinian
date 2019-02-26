@@ -16,7 +16,7 @@
                         </el-date-picker>
                 </el-form-item>
                 <el-form-item label="新闻类型">
-                    <el-select v-model="formInline.type" placeholder="">
+                    <el-select v-model="formInline.type" placeholder="" @change="onSubmit">
                     <!-- <el-option label="全部" value="0"></el-option> -->
                     <el-option label="行业动态" value="1"></el-option>
                     <el-option label="易念动态" value="2"></el-option>

@@ -1,8 +1,34 @@
 <template>
     <div id="news">
-        <div class="add">
-            <el-button type="warning" @click="add">新增新闻</el-button>
+        <div class="search" style="text-align:left;">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                <el-form-item label="新闻标题">
+                    <el-input v-model="formInline.title" placeholder="标题"></el-input>
+                </el-form-item>
+                <el-form-item label="新闻发布人">
+                    <el-input v-model="formInline.author" placeholder=""></el-input>
+                </el-form-item>
+                <el-form-item label="新闻日期">
+                    <el-date-picker
+                            v-model="formInline.date"
+                            type="date"
+                            placeholder="选择日期">
+                        </el-date-picker>
+                </el-form-item>
+                <el-form-item label="新闻类型">
+                    <el-select v-model="formInline.type" placeholder="">
+                    <!-- <el-option label="全部" value="0"></el-option> -->
+                    <el-option label="行业动态" value="1"></el-option>
+                    <el-option label="易念动态" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                    <el-button type="warning" @click="add">新增新闻</el-button>
+                </el-form-item>
+            </el-form>
         </div>
+        
         <el-table
             :data="tableData"
             border
@@ -51,6 +77,12 @@ export default {
         totals:10,
         pageSize:"10",
         page:1,
+        formInline: {
+            title: '',
+            author: '',
+            date: '',
+            type: '1'
+        }
       }
     },
     created(){
@@ -61,9 +93,14 @@ export default {
             this.$router.push("./addNews")
         },
         getData(){
+            console.log()
             this.get({url:"New/lists",data:{
                 page:this.page,
                 pageSize:this.pageSize,
+                title:this.formInline.title,
+                author:this.formInline.author,
+                date:new Date(this.formInline.date).getTime(),
+                type:this.formInline.type,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid
             }},(data)=>{
@@ -111,6 +148,9 @@ export default {
         toEdit(id){
             this.$router.push({path:"./editNews",query:{id:id}});
         },
+        onSubmit() {
+            this.getData();
+        }
     }
 }
 </script>

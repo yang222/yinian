@@ -12,11 +12,11 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/Admin': {
-        target: 'http://www.yinian.com:8080/Admin',
+        target: 'http://106.15.229.159:9001',
         secure: false,
         changeOrigin: true,
         pathRewrite: {
-          '^/Admin': ''
+          '^/Admin': '/Admin'
         }
       }
     },

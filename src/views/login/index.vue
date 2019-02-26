@@ -76,7 +76,7 @@ export default {
           });
           return
         }
-        this.post({url:"index/login",data:{
+        this.post({url:"Index/login",data:{
           username:this.loginForm.username,
           password:this.loginForm.password,
         }},(data)=>{
@@ -102,7 +102,6 @@ $bg:#2d3a4b;
 $light_gray:#fff;
 /* reset element-ui css */
 .login-container {
-  margin: 80px 0 100px 0;
   .iconfont{
     font-size: 24px;
     color: #66b1ff;
@@ -147,7 +146,7 @@ $dark_gray:#889aa4;
   height: 100%;
   min-width: 1024px;
   min-height: 576px;
-  background:url('/static/login/background.png') no-repeat;
+  background:url('../../assets/background.png') no-repeat;
   background-size: cover;
   position: relative;
   .el-form-item__content{

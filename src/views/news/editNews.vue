@@ -73,7 +73,7 @@ export default {
             author:"",
             id:"",
         },
-        url:"http://106.15.229.159:9001/Admin/New/upload?signature="+sessionStorage.token+"&uid="+sessionStorage.uid,
+        url:this.http+"New/upload?signature="+sessionStorage.token+"&uid="+sessionStorage.uid,
         rules: {
           name: [
             { required: true, message: '请输入新闻标题', trigger: 'blur' },

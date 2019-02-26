@@ -25,8 +25,8 @@ const store=new Vuex.Store({
 
 // var http = "http://106.15.229.159:9001/Admin/";
 var http = "http://www.yinian.com:8080/Admin/";
+Vue.prototype.http = 'http://www.yinian.com:8080/Admin/'
 Vue.prototype.post=function(obj,success,error){
-
   this.$http.post(http+obj.url,obj.data,{
         headers:{'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'},
         emulateJSON: true

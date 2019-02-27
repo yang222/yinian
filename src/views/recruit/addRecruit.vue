@@ -84,7 +84,10 @@ export default {
                       message: "添加成功！",
                       type: 'success'
                     });
-                    this.resetForm('ruleForm');
+                    // this.resetForm('ruleForm');
+                    setTimeout(()=>{
+                      this.$router.back(-1)
+                    })
                 }else{
                     this.$message.error(data.msg);
                 }

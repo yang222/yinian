@@ -17,7 +17,7 @@
                 </el-form-item>
                 <el-form-item label="新闻类型">
                     <el-select v-model="formInline.type" placeholder="" @change="onSubmit">
-                    <!-- <el-option label="全部" value="0"></el-option> -->
+                    <el-option label="全部" value="0"></el-option>
                     <el-option label="行业动态" value="1"></el-option>
                     <el-option label="易念动态" value="2"></el-option>
                     </el-select>
@@ -81,7 +81,7 @@ export default {
             title: '',
             author: '',
             date: '',
-            type: '1'
+            type: '0'
         }
       }
     },
@@ -99,7 +99,7 @@ export default {
                 pageSize:this.pageSize,
                 title:this.formInline.title,
                 author:this.formInline.author,
-                date:new Date(this.formInline.date).getTime(),
+                date:this.formInline.date == ""?0:new Date(this.formInline.date).getTime(),
                 type:this.formInline.type,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid

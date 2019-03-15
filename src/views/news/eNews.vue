@@ -31,6 +31,7 @@
                 <div class="addimg">
                   <el-upload
                     class="upload-demo"
+                    :disabled="true"
                     :action="url"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
@@ -113,13 +114,13 @@ export default {
                 is_cn:2,
             }},(data)=>{
                 if(data.status == 200){
-                    this.ruleForm.name = data.data.title
+                    this.ruleForm.name = data.data.e_title
                     this.ruleForm.id = data.data.id;
-                    this.ruleForm.author = data.data.author;
+                    this.ruleForm.author = data.data.e_author;
                     this.ruleForm.date1 = new Date(data.data.date)
                     this.ruleForm.type = data.data.type;
-                    this.ruleForm.desc = data.data.about;
-                    this.resource.txt.html(data.data.content)
+                    this.ruleForm.desc = data.data.e_about;
+                    this.resource.txt.html(data.data.e_content)
                     if(!data.data.image_url || data.data.image_url.length > 0){
                         data.data.image_url.forEach((e,i)=>{
                             this.fileList2.push({

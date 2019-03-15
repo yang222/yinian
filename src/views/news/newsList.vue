@@ -22,12 +22,12 @@
                     <el-option label="易念动态" value="2"></el-option>
                     </el-select>
                 </el-form-item>
-                 <el-form-item label="新闻中英文版">
+                 <!-- <el-form-item label="新闻中英文版">
                     <el-select v-model="formInline.is_cn" placeholder="" @change="onSubmit">
                     <el-option label="中文版" value="1"></el-option>
                     <el-option label="英文版" value="2"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
                     <el-button type="warning" @click="add">新增新闻</el-button>

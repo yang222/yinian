@@ -56,6 +56,7 @@
             <template slot-scope="scope">
                 <!-- <el-button size="small" type="primary" >查看</el-button> -->
                 <el-button type="success" @click="toEdit(scope.row.id)" size="small" >编辑</el-button>
+                <el-button type="primary" @click="toEnews(scope.row.id)" size="small" >英文版</el-button>
                 <el-button type="info"  @click="deletes(scope.row.id)"  size="small">删除</el-button>
             </template>
             </el-table-column>
@@ -147,6 +148,9 @@ export default {
         },
         toEdit(id){
             this.$router.push({path:"./editNews",query:{id:id}});
+        },
+        toEnews(id){
+            this.$router.push({path:"./eNews",query:{id:id}});
         },
         onSubmit() {
             this.getData();

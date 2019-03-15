@@ -110,7 +110,8 @@ export default {
             this.get({url:"New/select",data:{
                 id:this.$route.query.id,
                 signature:sessionStorage.token,
-                uid:sessionStorage.uid
+                uid:sessionStorage.uid,
+                is_cn:1,
             }},(data)=>{
                 if(data.status == 200){
                     this.ruleForm.name = data.data.title
@@ -189,6 +190,7 @@ export default {
                 author:this.ruleForm.author,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid,
+                is_cn:1,
             })},(data)=>{
                 if(data.status == 200){
                     this.$message({

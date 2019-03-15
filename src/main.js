@@ -23,11 +23,11 @@ const store=new Vuex.Store({
     }   
 })
 
-var http = "http://106.15.229.159:9001/Admin/";
-Vue.prototype.http = 'http://106.15.229.159:9001/Admin/';
+// var http = "http://106.15.229.159:9001/Admin/";
+// Vue.prototype.http = 'http://106.15.229.159:9001/Admin/';
 
-// var http = "http://www.yinian.com:8080/Admin/";
-// Vue.prototype.http = 'http://www.yinian.com:8080/Admin/'
+var http = "http://www.yinian.com:8080/Admin/";
+Vue.prototype.http = 'http://www.yinian.com:8080/Admin/'
 
 
 

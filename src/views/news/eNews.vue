@@ -14,7 +14,7 @@
                 <el-input v-model="ruleForm.author" :span="4"></el-input>
                  </el-col>
             </el-form-item>
-            <el-form-item label="新闻时间" required>
+            <!-- <el-form-item label="新闻时间" required>
                 <el-col :span="11">
                 <el-form-item prop="date1">
                     <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;" format="yyyy 年 MM 月 dd 日"></el-date-picker>
@@ -26,9 +26,8 @@
                 <el-radio label="1">行业新闻</el-radio>
                 <el-radio label="2">易念新闻</el-radio>
               </el-radio-group>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="添加图片">
-                <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
                 <div class="addimg">
                   <el-upload
                     class="upload-demo"
@@ -52,7 +51,7 @@
                 <div id="websiteEditorElem"></div>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm()">立即修改</el-button>
+                <el-button type="primary" @click="submitForm()">立即保存</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
                 <el-button type="primary" plain  @click="back">返回</el-button>
             </el-form-item>
@@ -110,7 +109,8 @@ export default {
             this.get({url:"New/select",data:{
                 id:this.$route.query.id,
                 signature:sessionStorage.token,
-                uid:sessionStorage.uid
+                uid:sessionStorage.uid,
+                is_cn:2,
             }},(data)=>{
                 if(data.status == 200){
                     this.ruleForm.name = data.data.title
@@ -180,19 +180,17 @@ export default {
             })
             this.postJson({url:"New/update",data:JSON.stringify({
                 id:this.ruleForm.id,
-                title:this.ruleForm.name,
-                content:this.resource.txt.html(),
-                date:new Date(this.ruleForm.date1).getTime(),
-                about:this.ruleForm.desc ,
-                image_url:files,
-                type:this.ruleForm.type,
-                author:this.ruleForm.author,
+                e_title:this.ruleForm.name,
+                e_content:this.resource.txt.html(),
+                e_about:this.ruleForm.desc ,
+                e_author:this.ruleForm.author,
                 signature:sessionStorage.token,
                 uid:sessionStorage.uid,
+                is_cn:2,
             })},(data)=>{
                 if(data.status == 200){
                     this.$message({
-                      message: "修改新闻成功！",
+                      message: "保存成功！",
                       type: 'success'
                     });
                     setTimeout(()=>{

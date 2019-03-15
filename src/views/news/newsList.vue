@@ -22,6 +22,12 @@
                     <el-option label="易念动态" value="2"></el-option>
                     </el-select>
                 </el-form-item>
+                 <el-form-item label="新闻中英文版">
+                    <el-select v-model="formInline.is_cn" placeholder="" @change="onSubmit">
+                    <el-option label="中文版" value="1"></el-option>
+                    <el-option label="英文版" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
                     <el-button type="warning" @click="add">新增新闻</el-button>
@@ -47,12 +53,13 @@
             <el-table-column
             prop="about"
             label="新闻简介"
+            width="300"
             >
             </el-table-column>
             <el-table-column
             fixed="right"
             label="操作"
-            width="200">
+            width="300">
             <template slot-scope="scope">
                 <!-- <el-button size="small" type="primary" >查看</el-button> -->
                 <el-button type="success" @click="toEdit(scope.row.id)" size="small" >编辑</el-button>
@@ -82,7 +89,8 @@ export default {
             title: '',
             author: '',
             date: '',
-            type: '0'
+            type: '0',
+            is_cn:"1",
         }
       }
     },
@@ -94,7 +102,6 @@ export default {
             this.$router.push("./addNews")
         },
         getData(){
-            console.log()
             this.get({url:"New/lists",data:{
                 page:this.page,
                 pageSize:this.pageSize,
@@ -103,7 +110,8 @@ export default {
                 date:this.formInline.date == ""?0:new Date(this.formInline.date).getTime(),
                 type:this.formInline.type,
                 signature:sessionStorage.token,
-                uid:sessionStorage.uid
+                uid:sessionStorage.uid,
+                is_cn:this.formInline.is_cn,
             }},(data)=>{
                 if(data.status == 200){
                     this.tableData = data.data;
@@ -160,7 +168,7 @@ export default {
 </script>
 <style lang="scss">
 #news{
-    padding: 10px;
+    padding: 20px;
     .add{
         padding-bottom: 10px;
         text-align: right;
